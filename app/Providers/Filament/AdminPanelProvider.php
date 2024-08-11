@@ -11,6 +11,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
+use Hydrat\TableLayoutToggle\TableLayoutTogglePlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -45,23 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
             ])
-            ->plugins([
-                FilamentEditProfilePlugin::make()
-                    ->shouldShowAvatarForm(
-                        value: true,
-                        directory: 'users/avatars', // image will be stored in 'storage/app/public/avatars
-                    )
-                    ->shouldShowSanctumTokens(
-                        // condition: fn () => auth()->user()->id === 1, //optional
-                        // permissions: ['custom', 'abilities', 'permissions'] //optional
-                    )
-                    ->shouldShowBrowserSessionsForm(
-                        // fn () => auth()->user()->id === 1, //optional
-                        //OR
-                        // false //optional
-                    )
-                    ->shouldRegisterNavigation(false),
-            ])
+            ->plugins($this->plugins())
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -86,5 +71,31 @@ class AdminPanelProvider extends PanelProvider
                 //     return auth()->user()->company()->exists();
                 // }),
             ]);
+    }
+
+    public function plugins(): array
+    {
+        return [
+            FilamentEditProfilePlugin::make()
+                ->shouldShowAvatarForm(
+                    value: true,
+                    directory: 'users/avatars', // image will be stored in 'storage/app/public/avatars
+                )
+                ->shouldShowSanctumTokens(
+                    // condition: fn () => auth()->user()->id === 1, //optional
+                    // permissions: ['custom', 'abilities', 'permissions'] //optional
+                )
+                ->shouldShowBrowserSessionsForm(
+                    // fn () => auth()->user()->id === 1, //optional
+                    //OR
+                    // false //optional
+                )
+                ->shouldRegisterNavigation(false),
+            TableLayoutTogglePlugin::make()
+                ->shareLayoutBetweenPages(true) // allow all tables to share the layout option (requires persistLayoutInLocalStorage to be true)
+                ->displayToggleAction() // used to display the toggle action button automatically
+                ->listLayoutButtonIcon('heroicon-o-list-bullet')
+                ->gridLayoutButtonIcon('heroicon-o-squares-2x2'),
+        ];
     }
 }

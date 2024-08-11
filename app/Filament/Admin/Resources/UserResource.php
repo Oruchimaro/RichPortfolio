@@ -10,6 +10,9 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\App;
@@ -66,43 +69,98 @@ class UserResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
+    public static function getListTableColumns(): array
     {
-        return $table
-            ->columns([
-                TextColumn::make('id')
-                    ->label(__('users.index.table.id'))
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\ImageColumn::make('avatar_url')
-                    ->label(__('users.index.table.avatar')),
-                TextColumn::make('name')
-                    ->label(__('users.index.table.name'))
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('email')
-                    ->label(__('users.index.table.email'))
-                    ->searchable()
-                    ->copyable()
-                    ->copyMessage('Email address copied')
-                    ->copyMessageDuration(1500),
+        return [
+            TextColumn::make('id')
+                ->label(__('users.index.table.id'))
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\ImageColumn::make('avatar_url')
+                ->label(__('users.index.table.avatar')),
+            TextColumn::make('name')
+                ->label(__('users.index.table.name'))
+                ->sortable()
+                ->searchable(),
+            TextColumn::make('email')
+                ->label(__('users.index.table.email'))
+                ->searchable()
+                ->copyable()
+                ->copyMessage('Email address copied')
+                ->copyMessageDuration(1500),
+            TextColumn::make('email_verified_at')
+                ->label(__('users.index.table.email_verified_at'))
+                ->jalaliDateTime(ignore: App::getLocale() !== 'fa')
+                ->toggleable(isToggledHiddenByDefault: true)
+                ->color('success')
+                ->sortable(),
+            TextColumn::make('created_at')
+                ->label(__('users.index.table.created_at'))
+                ->jalaliDateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+            TextColumn::make('updated_at')
+                ->label(__('users.index.table.updated_at'))
+                ->jalaliDateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ];
+    }
+
+    public static function getGridTableColumns(): array
+    {
+        // Make sure to stack your columns together
+        return [
+            Stack::make([
+                ImageColumn::make('avatar_url')
+                    ->label(__('users.index.table.avatar'))
+                    ->size(100),
+
+                // You may group columns together using the Split layout, so they are displayed side by side
+                Split::make([
+                    TextColumn::make('name')
+                        ->label(__('users.index.table.name'))
+                        ->sortable()
+                        ->searchable(),
+                    TextColumn::make('email')
+                        ->label(__('users.index.table.email'))
+                        ->searchable()
+                        ->copyable()
+                        ->copyMessage('Email address copied')
+                        ->copyMessageDuration(1500),
+                ]),
                 TextColumn::make('email_verified_at')
                     ->label(__('users.index.table.email_verified_at'))
                     ->jalaliDateTime(ignore: App::getLocale() !== 'fa')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->color('success')
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->label(__('users.index.table.created_at'))
-                    ->jalaliDateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->label(__('users.index.table.updated_at'))
-                    ->jalaliDateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ])->space(2)
+                ->extraAttributes([
+                    'class' => 'pb-2',
+                ]),
+        ];
+    }
+
+    public static function table(Table $table): Table
+    {
+        $livewire = $table->getLivewire();
+
+        return $table
+            ->columns(
+                $livewire->isGridLayout()
+                ? static::getGridTableColumns()
+                : static::getListTableColumns()
+            )
+            ->contentGrid(
+                fn () => $livewire->isListLayout()
+                   ? null
+                   : [
+                       'md' => 2,
+                       'lg' => 3,
+                       'xl' => 4,
+                   ]
+            )
             ->filters([
                 //
             ])
