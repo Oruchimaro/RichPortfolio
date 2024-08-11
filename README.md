@@ -43,3 +43,4 @@ laravel 11, livewire 3, filament 3 , mysql, redis, mailpit, minio, phpmyadmin
 -   [Jalali](https://filamentphp.com/plugins/mokhosh-jalali)
 
 -   [Language Switch](https://filamentphp.com/plugins/bezhansalleh-language-switch)
+-   [Edit Profile](https://filamentphp.com/plugins/joaopaulolndev-edit-profile)
