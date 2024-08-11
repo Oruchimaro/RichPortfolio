@@ -14,10 +14,18 @@ class UpdatePasswordAction
     public static function make(User|Model $user): Action
     {
         return Action::make('updatePassword')
+            ->label(__('users.index.form.update_password_btn'))
             ->color(Color::Sky)
             ->form([
-                TextInput::make('password')->required()->password()->confirmed(),
-                TextInput::make('password_confirmation')->required()->password(),
+                TextInput::make('password')
+                    ->label(__('users.index.form.password'))
+                    ->required()
+                    ->password()
+                    ->confirmed(),
+                TextInput::make('password_confirmation')
+                    ->label(__('users.index.form.password_confirm'))
+                    ->required()
+                    ->password(),
             ])
             ->action(function (array $data) use ($user) {
                 $user->update([
