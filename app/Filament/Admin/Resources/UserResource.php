@@ -2,7 +2,7 @@
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Classes\Traits\Filament\NavigationTranslation;
+use App\Filament\Admin\Classes\Traits\NavigationTranslation;
 use App\Filament\Admin\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms;

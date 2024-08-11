@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Admin\Classes\Traits\Filament;
+namespace App\Filament\Admin\Classes\Traits;
 
 use Illuminate\Translation\MessageSelector;
 
