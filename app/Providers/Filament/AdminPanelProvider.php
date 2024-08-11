@@ -11,6 +11,8 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
+use Hasnayeen\Themes\Http\Middleware\SetTheme;
+use Hasnayeen\Themes\ThemesPlugin;
 use Hydrat\TableLayoutToggle\TableLayoutTogglePlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -57,6 +59,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                SetTheme::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
@@ -96,6 +99,8 @@ class AdminPanelProvider extends PanelProvider
                 ->displayToggleAction() // used to display the toggle action button automatically
                 ->listLayoutButtonIcon('heroicon-o-list-bullet')
                 ->gridLayoutButtonIcon('heroicon-o-squares-2x2'),
+
+            ThemesPlugin::make(),
         ];
     }
 }
