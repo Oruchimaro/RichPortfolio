@@ -6,6 +6,7 @@ use App\Filament\Admin\Classes\Traits\NavigationTranslation;
 use App\Filament\Admin\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -52,6 +53,10 @@ class UserResource extends Resource
                     ->jalali(ignore: App::getLocale() !== 'fa')
                     ->native(false)
                     ->default(now()),
+                FileUpload::make('avatar_url')
+                    ->image()
+                    ->directory('users/avatars')
+                    ->label(__('users.index.form.avatar')),
                 Forms\Components\TextInput::make('password')
                     ->label(__('users.index.form.password'))
                     ->password()
@@ -69,6 +74,8 @@ class UserResource extends Resource
                     ->label(__('users.index.table.id'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\ImageColumn::make('avatar_url')
+                    ->label(__('users.index.table.avatar')),
                 TextColumn::make('name')
                     ->label(__('users.index.table.name'))
                     ->sortable()

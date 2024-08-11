@@ -9,6 +9,8 @@ return [
             'email_verified_at' => 'تاریخ عضپویت',
             'created_at' => 'تاریخ ایجاد',
             'updated_at' => 'تاریخ بخ‌روز‌رسانی',
+            'avatar' => 'تصویر',
+
         ],
         'form' => [
             'name' => 'نام',
@@ -17,6 +19,8 @@ return [
             'password' => 'رمز‌عبور',
             'password_confirm' => 'تکرار رمز‌عبور',
             'update_password_btn' => 'به‌روزرسانی رمزعبور',
+            'avatar' => 'تصویر',
+
         ],
     ],
     'navigation' => [
